@@ -13,7 +13,9 @@ namespace com.businesscentral
                 ConnectionString = config["ConnectionString"];
                 NotificationHubName = config["NotificationHubName"];
                 DefaultMessage = config["DefaultMessage"];
-                
+                if (!String.IsNullOrEmpty(config["DefaultBadge"]))
+                    DefaultBadge = Convert.ToInt32(config["DefaultBadge"]);
+
             }
             // If you are customizing here it means you
             //  should give a look on how use
@@ -24,10 +26,13 @@ namespace com.businesscentral
                 NotificationHubName = "{your_hub_name}";
             if (String.IsNullOrEmpty(DefaultMessage))
                 DefaultMessage = "Hello world";
+            if (DefaultBadge == 0)
+                DefaultBadge = 42;
         }
 
         public String ConnectionString;
         public String NotificationHubName;
         public String DefaultMessage;
+        public int DefaultBadge;
     }
 }

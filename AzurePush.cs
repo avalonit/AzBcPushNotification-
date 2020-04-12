@@ -39,7 +39,7 @@ namespace com.businesscentral
                 InAppMessage = message,
                 Aps = new Aps()
                 {
-                    Badge = 42,
+                    Badge = hubConfig.DefaultBadge,
                     Sound = "default",
                     Alert = message,
                 }
