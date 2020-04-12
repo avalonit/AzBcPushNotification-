@@ -26,18 +26,14 @@ namespace com.businesscentral
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
-
             var hubConfig = new ConnectorConfig(config);
 
-            NotificationHubClient hub =
-                NotificationHubClient.CreateClientFromConnectionString(
-                    hubConfig.ConnectionString,
-                    hubConfig.NotificationHubName);
-
+            // Compose message
             string message = req.Query["validationToken"];
             if (String.IsNullOrEmpty(message))
                 message = hubConfig.DefaultMessage;
 
+            // Create class forA AzureNotification Hub
             var appleAps = new AppleAps()
             {
                 InAppMessage = message,
@@ -49,6 +45,11 @@ namespace com.businesscentral
                 }
             };
 
+            // Dispatch push message
+            NotificationHubClient hub =
+                NotificationHubClient.CreateClientFromConnectionString(
+                    hubConfig.ConnectionString,
+                    hubConfig.NotificationHubName);
             hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps)).Wait();
 
             return new StatusCodeResult(200);
