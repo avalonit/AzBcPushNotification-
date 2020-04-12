@@ -24,8 +24,7 @@ namespace com.businesscentral
             var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
+                .AddEnvironmentVariables().Build();
             var hubConfig = new ConnectorConfig(config);
 
             // Compose message
@@ -38,11 +37,7 @@ namespace com.businesscentral
             {
                 InAppMessage = message,
                 Aps = new Aps()
-                {
-                    Badge = hubConfig.DefaultBadge,
-                    Sound = "default",
-                    Alert = message,
-                }
+                { Badge = hubConfig.DefaultBadge, Sound = "default", Alert = message, }
             };
 
             // Dispatch push message
