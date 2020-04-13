@@ -28,7 +28,7 @@ namespace com.businesscentral
             var hubConfig = new ConnectorConfig(config);
 
             // Compose message
-            string message = req.Query["validationToken"];
+            string message = req.Query["message"];
             if (String.IsNullOrEmpty(message))
                 message = hubConfig.DefaultMessage;
 
