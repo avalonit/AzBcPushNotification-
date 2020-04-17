@@ -31,21 +31,36 @@ namespace com.businesscentral
             string message = req.Query["message"];
             if (String.IsNullOrEmpty(message))
                 message = hubConfig.DefaultMessage;
+            // If you want to implement tag ..
+            string tag = req.Query["tag"];
+            if (String.IsNullOrEmpty(tag))
+                tag = hubConfig.DefaultTag;
+            tag=null; 
 
-            // Create class forA AzureNotification Hub
-            var appleAps = new AppleAps()
+            // Create class for AzureNotification Hub (APPLE)
+            var appleAps = new AppleBaseAps()
             {
                 InAppMessage = message,
-                Aps = new Aps()
-                { Badge = hubConfig.DefaultBadge, Sound = "default", Alert = message, }
+                Aps = new AppleAps()
+                { Badge = hubConfig.DefaultBadge, Sound = "default", Alert = message }
             };
 
-            // Dispatch push message
+            // Dispatch push message (APPLE)
             NotificationHubClient hub =
                 NotificationHubClient.CreateClientFromConnectionString(
                     hubConfig.ConnectionString,
                     hubConfig.NotificationHubName);
-            hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps)).Wait();
+            //hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps), tag).Wait();
+
+            // Create class for AzureNotification Hub (GOOGLE FIREBASE FCM)
+            var firebaseAps = new FirebaseBaseAps()
+            {
+                data = new FirebaseAps()
+                { Message = message }
+            };
+
+            // Dispatch push message (GOOGLE FIREBASE FCM)
+            hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps)).Wait();
 
             return new StatusCodeResult(200);
         }

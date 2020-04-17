@@ -3,16 +3,16 @@ using Newtonsoft.Json;
 namespace com.businesscentral
 {
 
-    public partial class AppleAps
+    public partial class AppleBaseAps
     {
         [JsonProperty("aps")]
-        public Aps Aps { get; set; }
+        public AppleAps Aps { get; set; }
 
         [JsonProperty("inAppMessage")]
         public string InAppMessage { get; set; }
     }
 
-    public partial class Aps
+    public partial class AppleAps
     {
         [JsonProperty("alert")]
         public string Alert { get; set; }
