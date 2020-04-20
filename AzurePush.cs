@@ -36,6 +36,11 @@ namespace com.businesscentral
             if (String.IsNullOrEmpty(tag))
                 tag = hubConfig.DefaultTag;
 
+            NotificationHubClient hub =
+                NotificationHubClient.CreateClientFromConnectionString(
+                    hubConfig.ConnectionString,
+                    hubConfig.NotificationHubName);
+
             if (hubConfig.SendApple)
             {
                 // Create class for AzureNotification Hub (APPLE)
@@ -47,10 +52,6 @@ namespace com.businesscentral
                 };
 
                 // Dispatch push message (APPLE)
-                NotificationHubClient hub =
-                    NotificationHubClient.CreateClientFromConnectionString(
-                        hubConfig.ConnectionString,
-                        hubConfig.NotificationHubName);
                 hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps), tag).Wait();
             }
 
