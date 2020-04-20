@@ -8,6 +8,7 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace com.businesscentral
 {
@@ -30,7 +31,7 @@ namespace com.businesscentral
             // Compose message
             string message = req.Query["message"];
             if (String.IsNullOrEmpty(message))
-                message = hubConfig.DefaultMessage;
+                message = String.Format(hubConfig.DefaultMessage, DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
             // If you want to implement tag ..
             string tag = req.Query["tag"];
             if (String.IsNullOrEmpty(tag))
@@ -58,14 +59,14 @@ namespace com.businesscentral
             if (hubConfig.SendAndroid)
             {
                 // Create class for AzureNotification Hub (GOOGLE FIREBASE FCM)
+                // Dispatch push message (GOOGLE FIREBASE FCM)
+
                 var firebaseAps = new FirebaseBaseAps()
                 {
-                    data = new FirebaseAps()
-                    { Message = message }
+                    data = new FirebaseAps() { Message = message }
                 };
+                hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps), tag).Wait();
 
-                // Dispatch push message (GOOGLE FIREBASE FCM)
-                hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps)).Wait();
             }
 
             return new StatusCodeResult(200);
