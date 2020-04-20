@@ -18,6 +18,17 @@ namespace com.businesscentral
                 if (!String.IsNullOrEmpty(config["DefaultTag"]))
                     DefaultBadge = Convert.ToInt32(config["DefaultTag"]);
 
+                if (!String.IsNullOrEmpty(config["SendApple"]))
+                    SendApple = Convert.ToBoolean(config["SendApple"]);
+                else
+                    SendApple = true;
+
+                if (!String.IsNullOrEmpty(config["SendAndroid"]))
+                    SendAndroid = Convert.ToBoolean(config["SendAndroid"]);
+                else
+                    SendAndroid = true;
+
+
             }
             // If you are customizing here it means you
             //  should give a look on how use
@@ -39,5 +50,8 @@ namespace com.businesscentral
         public String DefaultMessage;
         public int DefaultBadge;
         public String DefaultTag;
+        public Boolean SendApple;
+        public Boolean SendAndroid;
+
     }
 }

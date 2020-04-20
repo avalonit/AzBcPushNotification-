@@ -35,32 +35,37 @@ namespace com.businesscentral
             string tag = req.Query["tag"];
             if (String.IsNullOrEmpty(tag))
                 tag = hubConfig.DefaultTag;
-            tag=null; 
 
-            // Create class for AzureNotification Hub (APPLE)
-            var appleAps = new AppleBaseAps()
+            if (hubConfig.SendApple)
             {
-                InAppMessage = message,
-                Aps = new AppleAps()
-                { Badge = hubConfig.DefaultBadge, Sound = "default", Alert = message }
-            };
+                // Create class for AzureNotification Hub (APPLE)
+                var appleAps = new AppleBaseAps()
+                {
+                    InAppMessage = message,
+                    Aps = new AppleAps()
+                    { Badge = hubConfig.DefaultBadge, Sound = "default", Alert = message }
+                };
 
-            // Dispatch push message (APPLE)
-            NotificationHubClient hub =
-                NotificationHubClient.CreateClientFromConnectionString(
-                    hubConfig.ConnectionString,
-                    hubConfig.NotificationHubName);
-            //hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps), tag).Wait();
+                // Dispatch push message (APPLE)
+                NotificationHubClient hub =
+                    NotificationHubClient.CreateClientFromConnectionString(
+                        hubConfig.ConnectionString,
+                        hubConfig.NotificationHubName);
+                hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps), tag).Wait();
+            }
 
-            // Create class for AzureNotification Hub (GOOGLE FIREBASE FCM)
-            var firebaseAps = new FirebaseBaseAps()
+            if (hubConfig.SendAndroid)
             {
-                data = new FirebaseAps()
-                { Message = message }
-            };
+                // Create class for AzureNotification Hub (GOOGLE FIREBASE FCM)
+                var firebaseAps = new FirebaseBaseAps()
+                {
+                    data = new FirebaseAps()
+                    { Message = message }
+                };
 
-            // Dispatch push message (GOOGLE FIREBASE FCM)
-            hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps)).Wait();
+                // Dispatch push message (GOOGLE FIREBASE FCM)
+                hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps)).Wait();
+            }
 
             return new StatusCodeResult(200);
         }
