@@ -16,7 +16,7 @@ namespace com.businesscentral
                 if (!String.IsNullOrEmpty(config["DefaultBadge"]))
                     DefaultBadge = Convert.ToInt32(config["DefaultBadge"]);
                 if (!String.IsNullOrEmpty(config["DefaultTag"]))
-                    DefaultBadge = Convert.ToInt32(config["DefaultTag"]);
+                    DefaultTag = config["DefaultTag"];
 
                 if (!String.IsNullOrEmpty(config["SendApple"]))
                     SendApple = Convert.ToBoolean(config["SendApple"]);
