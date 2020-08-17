@@ -53,19 +53,25 @@ namespace com.businesscentral
                 };
 
                 // Dispatch push message (APPLE)
-                hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps), tag).Wait();
+                if (!String.IsNullOrEmpty(tag))
+                    hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps), tag).Wait();
+                else
+                    hub.SendAppleNativeNotificationAsync(JsonConvert.SerializeObject(appleAps)).Wait();
             }
 
             if (hubConfig.SendAndroid)
             {
                 // Create class for AzureNotification Hub (GOOGLE FIREBASE FCM)
                 // Dispatch push message (GOOGLE FIREBASE FCM)
-
                 var firebaseAps = new FirebaseBaseAps()
                 {
                     data = new FirebaseAps() { Message = message }
                 };
-                hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps), tag).Wait();
+                
+                if (!String.IsNullOrEmpty(tag))
+                    hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps), tag).Wait();
+                else
+                    hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps)).Wait();
 
             }
 
