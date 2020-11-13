@@ -8,7 +8,6 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace com.businesscentral
 {
@@ -21,6 +20,8 @@ namespace com.businesscentral
             ILogger log,
             ExecutionContext context)
         {
+            log.LogInformation(string.Format("start"));
+
             // Load configuration
             var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
@@ -32,9 +33,8 @@ namespace com.businesscentral
             var message = req.Query["message"].ToString();
             var user = req.Query["user"].ToString();
 
-            log.LogTrace(string.Format("user: {0}", user));
-            log.LogTrace(string.Format("message: {0}", message));
-
+            log.LogInformation(string.Format("user: {0}", user));
+            log.LogInformation(string.Format("message: {0}", message));
 
             if (String.IsNullOrEmpty(message))
                 message = String.Format(hubConfig.DefaultMessage, DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
@@ -43,13 +43,14 @@ namespace com.businesscentral
             if (String.IsNullOrEmpty(tag))
                 tag = hubConfig.DefaultTag;
 
-            NotificationHubClient hub =
+            var hub =
                 NotificationHubClient.CreateClientFromConnectionString(
                     hubConfig.ConnectionString,
                     hubConfig.NotificationHubName);
 
             if (hubConfig.SendApple)
             {
+                log.LogInformation(string.Format("SendApple"));
                 // Create class for AzureNotification Hub (APPLE)
                 var appleAps = new AppleBaseAps()
                 {
@@ -67,6 +68,7 @@ namespace com.businesscentral
 
             if (hubConfig.SendAndroid)
             {
+                log.LogInformation(string.Format("SendAndroid"));
                 // Create class for AzureNotification Hub (GOOGLE FIREBASE FCM)
                 // Dispatch push message (GOOGLE FIREBASE FCM)
                 var firebaseAps = new FirebaseBaseAps()
@@ -78,6 +80,21 @@ namespace com.businesscentral
                     hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps), tag).Wait();
                 else
                     hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps)).Wait();
+
+            }
+
+            if (!string.IsNullOrEmpty(user))
+            {
+                var composer = new MessageComposer(hubConfig, log);
+                var messenger = new MessageConnector(hubConfig, log);
+
+                // Message is composed
+                var messageHtml = composer.DataBindEmail(message);
+                log.LogInformation(String.Format("Message : {0}", messageHtml));
+
+                // Message sent
+                var messageEmail = messenger.SendMail(messageHtml, user);
+                log.LogInformation(String.Format("SMS/Email Message result : {0}", messageEmail.Status));
 
             }
 

@@ -13,6 +13,9 @@ namespace com.businesscentral
                 ConnectionString = config["ConnectionString"];
                 NotificationHubName = config["NotificationHubName"];
                 DefaultMessage = config["DefaultMessage"];
+                SendGridApiKey = config["SendGridApiKey"];
+                SendGridSender = config["SendGridSender"];
+
                 if (!String.IsNullOrEmpty(config["DefaultBadge"]))
                     DefaultBadge = Convert.ToInt32(config["DefaultBadge"]);
                 if (!String.IsNullOrEmpty(config["DefaultTag"]))
@@ -49,9 +52,12 @@ namespace com.businesscentral
         public String NotificationHubName;
         public String DefaultMessage;
         public int DefaultBadge;
-        public String DefaultTag;
+        public string DefaultTag;
         public Boolean SendApple;
         public Boolean SendAndroid;
+
+        public string SendGridApiKey;
+        public string SendGridSender;
 
     }
 }
