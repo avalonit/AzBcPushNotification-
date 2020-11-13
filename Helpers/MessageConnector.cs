@@ -30,9 +30,12 @@ namespace com.businesscentral
                 { new EmailAddress(email) };
             msg.AddTos(recipients);
 
+            var ccn = new List<EmailAddress>
+                { new EmailAddress(config.SendGridSender) };
+            msg.AddBccs(ccn);
+
             msg.SetSubject("Prime 365 Travel Expenses");
 
-            //msg.AddContent(MimeType.Text, text);
             msg.AddContent(MimeType.Html, messageBody);
             var response = await client.SendEmailAsync(msg);
 
