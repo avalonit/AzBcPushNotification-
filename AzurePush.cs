@@ -29,7 +29,13 @@ namespace com.businesscentral
             var hubConfig = new ConnectorConfig(config);
 
             // Compose message
-            string message = req.Query["message"];
+            var message = req.Query["message"].ToString();
+            var user = req.Query["user"].ToString();
+
+            log.LogTrace(string.Format("user: {0}", user));
+            log.LogTrace(string.Format("message: {0}", message));
+
+
             if (String.IsNullOrEmpty(message))
                 message = String.Format(hubConfig.DefaultMessage, DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
             // If you want to implement tag ..
@@ -67,7 +73,7 @@ namespace com.businesscentral
                 {
                     data = new FirebaseAps() { Message = message }
                 };
-                
+
                 if (!String.IsNullOrEmpty(tag))
                     hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(firebaseAps), tag).Wait();
                 else
