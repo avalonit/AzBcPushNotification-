@@ -53,8 +53,6 @@ namespace com.businesscentral
                 NotificationHubName = "{your_hub_name}";
             if (String.IsNullOrEmpty(DefaultMessage))
                 DefaultMessage = "Hello world";
-            if (DefaultBadge == 0)
-                DefaultBadge = 42;
             if (String.IsNullOrEmpty(DefaultTag))
                 DefaultTag = "044";
         }

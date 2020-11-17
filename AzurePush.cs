@@ -37,7 +37,7 @@ namespace com.businesscentral
             log.LogInformation(string.Format("message: {0}", message));
 
             if (string.IsNullOrEmpty(message))
-                message = String.Format(hubConfig.DefaultMessage, DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
+                message = string.Format(hubConfig.DefaultMessage, DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
             // If you want to implement tag ..
             var tag = req.Query["tag"].ToString();
             if (string.IsNullOrEmpty(tag))

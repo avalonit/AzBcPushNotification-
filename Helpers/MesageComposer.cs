@@ -27,15 +27,15 @@ namespace com.businesscentral
         {
             var message = new StringBuilder();
 
-            message.Append(String.Format("Hi, "));
-            message.Append(String.Format("<br>"));
-            message.Append(String.Format("<br>"));
-            message.Append(String.Format(textMessage));
-            message.Append(String.Format("<br>"));
-            message.Append(String.Format("<br>"));
-            message.Append(String.Format("<a href='https://play.google.com/store/apps/details?id=it.varprime.travelexpense'>Download Google</a>"));
-            message.Append(String.Format("<br>"));
-            message.Append(String.Format("<a href='https://apps.apple.com/us/app/prime365-travel-expenses/id1475646873'>Download Apple</a>"));
+            message.Append(string.Format("Hi, "));
+            message.Append(string.Format("<br>"));
+            message.Append(string.Format("<br>"));
+            message.Append(string.Format(textMessage));
+            message.Append(string.Format("<br>"));
+            message.Append(string.Format("<br>"));
+            message.Append(string.Format("<a href='https://play.google.com/store/apps/details?id=it.varprime.travelexpense'>Download Google</a>"));
+            message.Append(string.Format("<br>"));
+            message.Append(string.Format("<a href='https://apps.apple.com/us/app/prime365-travel-expenses/id1475646873'>Download Apple</a>"));
 
             return message.ToString();
         }
