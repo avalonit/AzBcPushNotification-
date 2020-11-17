@@ -16,20 +16,31 @@ namespace com.businesscentral
                 SendGridApiKey = config["SendGridApiKey"];
                 SendGridSender = config["SendGridSender"];
 
-                if (!String.IsNullOrEmpty(config["DefaultBadge"]))
+                BCTenant = config["BCTenant"];
+                BCCompanyID = config["BCCompanyID"];
+                BCApiVersion = config["BCApiVersion"];
+                BCApiPrefix = config["BCApiPrefix"];
+                BCAuthInfo = config["BCAuthInfo"];
+
+                if (!string.IsNullOrEmpty(config["DefaultBadge"]))
                     DefaultBadge = Convert.ToInt32(config["DefaultBadge"]);
-                if (!String.IsNullOrEmpty(config["DefaultTag"]))
+                if (!string.IsNullOrEmpty(config["DefaultTag"]))
                     DefaultTag = config["DefaultTag"];
 
-                if (!String.IsNullOrEmpty(config["SendApple"]))
+                if (!string.IsNullOrEmpty(config["SendApple"]))
                     SendApple = Convert.ToBoolean(config["SendApple"]);
                 else
                     SendApple = true;
 
-                if (!String.IsNullOrEmpty(config["SendAndroid"]))
+                if (!string.IsNullOrEmpty(config["SendAndroid"]))
                     SendAndroid = Convert.ToBoolean(config["SendAndroid"]);
                 else
                     SendAndroid = true;
+
+                if (!string.IsNullOrEmpty(config["SendMail"]))
+                    SendMail = Convert.ToBoolean(config["SendMail"]);
+                else
+                    SendMail = true;
 
 
             }
@@ -48,16 +59,24 @@ namespace com.businesscentral
                 DefaultTag = "044";
         }
 
-        public String ConnectionString;
-        public String NotificationHubName;
-        public String DefaultMessage;
+        public string ConnectionString;
+        public string NotificationHubName;
+        public string DefaultMessage;
         public int DefaultBadge;
         public string DefaultTag;
-        public Boolean SendApple;
-        public Boolean SendAndroid;
+        public bool SendApple;
+        public bool SendAndroid;
+        public bool SendMail;
 
         public string SendGridApiKey;
         public string SendGridSender;
+
+
+        public string BCTenant;
+        public string BCCompanyID;
+        public string BCApiVersion;
+        public string BCApiPrefix;
+        public string BCAuthInfo;
 
     }
 }

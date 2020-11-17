@@ -36,12 +36,22 @@ namespace com.businesscentral
             log.LogInformation(string.Format("user: {0}", user));
             log.LogInformation(string.Format("message: {0}", message));
 
-            if (String.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message))
                 message = String.Format(hubConfig.DefaultMessage, DateTime.Now.ToString("dd/MM/yy HH:mm:ss"));
             // If you want to implement tag ..
-            string tag = req.Query["tag"];
-            if (String.IsNullOrEmpty(tag))
-                tag = hubConfig.DefaultTag;
+            var tag = req.Query["tag"].ToString();
+            if (string.IsNullOrEmpty(tag))
+            {
+                if (string.IsNullOrEmpty(user))
+                    tag = hubConfig.DefaultTag;
+                else
+                {
+                    var bcConnector = new BusinessCentralConnector(hubConfig, log);
+                    var result = await bcConnector.GetUser(user, "APP365TEUsers");
+                    if (result != null && result.Value != null && result.Value.Count > 0)
+                        tag = result.Value[0].UserCode;
+                }
+            }
 
             var hub =
                 NotificationHubClient.CreateClientFromConnectionString(
@@ -50,7 +60,7 @@ namespace com.businesscentral
 
             if (hubConfig.SendApple)
             {
-                log.LogInformation(string.Format("SendApple"));
+                log.LogInformation(string.Format("SendApple {0}", tag));
                 // Create class for AzureNotification Hub (APPLE)
                 var appleAps = new AppleBaseAps()
                 {
@@ -68,7 +78,7 @@ namespace com.businesscentral
 
             if (hubConfig.SendAndroid)
             {
-                log.LogInformation(string.Format("SendAndroid"));
+                log.LogInformation(string.Format("SendAndroid {0}", tag));
                 // Create class for AzureNotification Hub (GOOGLE FIREBASE FCM)
                 // Dispatch push message (GOOGLE FIREBASE FCM)
                 var firebaseAps = new FirebaseBaseAps()
@@ -83,18 +93,18 @@ namespace com.businesscentral
 
             }
 
-            if (!string.IsNullOrEmpty(user))
+            if (hubConfig.SendMail && !string.IsNullOrEmpty(user))
             {
                 var composer = new MessageComposer(hubConfig, log);
                 var messenger = new MessageConnector(hubConfig, log);
 
                 // Message is composed
                 var messageHtml = composer.DataBindEmail(message);
-                log.LogInformation(String.Format("Message : {0}", messageHtml));
+                log.LogInformation(String.Format("Send Email Message : {0}", messageHtml));
 
                 // Message sent
                 var messageEmail = messenger.SendMail(messageHtml, user);
-                log.LogInformation(String.Format("SMS/Email Message result : {0}", messageEmail.Status));
+                log.LogInformation(String.Format("Email Message result : {0}", messageEmail.Status));
 
             }
 
